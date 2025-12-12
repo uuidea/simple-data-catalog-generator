@@ -3,7 +3,7 @@ from rdflib import Graph, URIRef, RDF, DCAT, DCTERMS, SKOS, Namespace
 
 from pydantic import BaseModel, Field
 from typing import List, Optional
-from simple_data_catalog_generator.model.datamodel import DataCatalog
+
 # from create_metadata_table import create_metadata_table
 
 import os
