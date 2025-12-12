@@ -3,7 +3,7 @@ from rdflib.namespace import DCAT, DCTERMS
 
 # from pydantic import BaseModel, Field
 from typing import List, Optional
-from simple_data_catalog_generator.datamodel import DataCatalog
+# from simple_data_catalog_generator.datamodel import DataCatalog
 from simple_data_catalog_generator.create_metadata_table import create_metadata_table
 from simple_data_catalog_generator.analysis_functions import create_theme_word_cloud
 from simple_data_catalog_generator.page_creation_functions import write_file, get_title, get_description, add_to_nav
