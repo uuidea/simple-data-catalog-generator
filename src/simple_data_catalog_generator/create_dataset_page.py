@@ -1,9 +1,9 @@
 from rdflib import Graph, URIRef, DCAT, RDF
-from simple_data_catalog.page_creation_functions import write_file, get_title, get_description, create_local_link
-from simple_data_catalog.create_metadata_table import create_metadata_table
-from simple_data_catalog.analysis_functions import was_derived_from_graphic, supply_chain_analysis
-from simple_data_catalog.create_data_quality_table import create_data_quality_table
-from simple_data_catalog.create_distribution_table import create_distribution_table
+from simple_data_catalog_generator.page_creation_functions import write_file, get_title, get_description, create_local_link
+from simple_data_catalog_generator.create_metadata_table import create_metadata_table
+from simple_data_catalog_generator.analysis_functions import was_derived_from_graphic, supply_chain_analysis
+from simple_data_catalog_generator.create_data_quality_table import create_data_quality_table
+from simple_data_catalog_generator.create_distribution_table import create_distribution_table
 
 def create_dataset_page(dataset: URIRef, catalog_graph:Graph):
     adoc_str= str()

@@ -1,6 +1,6 @@
 from rdflib import URIRef, Graph, Namespace
 from rdflib.namespace import DCTERMS, PROV, SKOS
-from simple_data_catalog.create_adoc_table import create_adoc_table
+from simple_data_catalog_generator.create_adoc_table import create_adoc_table
 import urllib.parse
 
 def create_data_quality_table(catalog_graph: Graph, resource: URIRef):

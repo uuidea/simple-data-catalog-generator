@@ -3,16 +3,15 @@ from rdflib import Graph, URIRef, RDF, DCAT, DCTERMS, SKOS
 
 from pydantic import BaseModel, Field
 from typing import List, Optional
-from simple_data_catalog.model.datamodel import DataCatalog
 # from create_metadata_table import create_metadata_table
 
 import os
 import re
 
-from simple_data_catalog.create_metadata_table import create_metadata_table
-from simple_data_catalog.analysis_functions import create_theme_word_cloud
-from simple_data_catalog.page_creation_functions import write_file, get_title, create_local_link, get_prefLabel, get_definition
-from simple_data_catalog.create_adoc_table import create_adoc_table
+from simple_data_catalog_generator.create_metadata_table import create_metadata_table
+from simple_data_catalog_generator.analysis_functions import create_theme_word_cloud
+from simple_data_catalog_generator.page_creation_functions import write_file, get_title, create_local_link, get_prefLabel, get_definition
+from simple_data_catalog_generator.create_adoc_table import create_adoc_table
 
 
 def create_concept_page(concept: URIRef, catalog_graph: Graph):
