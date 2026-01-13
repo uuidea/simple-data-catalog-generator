@@ -1,15 +1,17 @@
-from simple_data_catalog_generator.create_catalog_page import create_catalog_page
-from simple_data_catalog_generator.create_dataset_page import create_dataset_page
-from simple_data_catalog_generator.create_concept_page import create_concept_page
-from simple_data_catalog_generator.create_metric_page import create_metric_page
-from simple_data_catalog_generator.create_series_page import create_series_page
-from simple_data_catalog_generator.page_creation_functions import create_nav_header
-from simple_data_catalog_generator.create_dataservice_page import create_dataservice_page
+from create_catalog_page import create_catalog_page
+from create_dataset_page import create_dataset_page
+from create_concept_page import create_concept_page
+from create_metric_page import create_metric_page
+from create_series_page import create_series_page
+from page_creation_functions import create_nav_header
+from create_dataservice_page import create_dataservice_page
+from create_policy_page import create_policy_page
 from rdflib import Graph, RDF, DCAT, SKOS, Namespace
 import os
 
 from pathlib import Path
 DQV = Namespace("http://www.w3.org/ns/dqv#")
+ODRL = Namespace("http://www.w3.org/ns/odrl/2/")
 
 def create_data_catalog(catalog_graph: Graph):
 
@@ -67,11 +69,16 @@ def create_data_catalog(catalog_graph: Graph):
     for metric in catalog_graph.subjects(RDF.type, DQV.Metric):
         create_metric_page(metric=metric,catalog_graph=catalog_graph)
 
+    create_nav_header(page_type="Policy")
+    for policy in catalog_graph.subjects(RDF.type, ODRL.Policy):
+        create_policy_page(policy=policy,catalog_graph=catalog_graph)
+    
+
 
 
 
 
 if __name__ == "__main__":
     catalog_graph=Graph()
-    catalog_graph.parse('data-catalog/data-catalog.ttl')
+    catalog_graph.parse('tests/test-data.ttl')
     create_data_catalog(catalog_graph=catalog_graph)

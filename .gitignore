@@ -3,6 +3,10 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+# antora stuff
+docs/
+modules/
+
 # C extensions
 *.so
 

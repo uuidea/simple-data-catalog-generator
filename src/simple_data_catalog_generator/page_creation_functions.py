@@ -10,6 +10,8 @@ import os
 import re
 DQV = Namespace("http://www.w3.org/ns/dqv#")
 ADMS= Namespace("http://www.w3.org/ns/adms#")
+ODRL = Namespace("http://www.w3.org/ns/odrl/2/")
+
 
 
 def create_local_link(resource: URIRef, catalog_graph: Graph)->str:
@@ -36,6 +38,9 @@ def create_local_link(resource: URIRef, catalog_graph: Graph)->str:
     elif rdf_type== DCAT.Catalog:
         title= get_title(subject=resource, graph=catalog_graph)       
         local_link= f"xref:dataset-series:{id}.adoc[{title}]"  
+    elif rdf_type== ODRL.Policy:
+        title= get_title(subject=resource, graph=catalog_graph)       
+        local_link= f"xref:dataset-series:{id}.adoc[{title}]"      
     else:
         local_link=""                
     
@@ -144,20 +149,7 @@ def add_to_nav(file_name: str, output_dir: str, resource: URIRef, catalog_graph:
     else :
         # Extract the dataset name from the path
         nav_entry = f"*** {name}"
-    # elif 'modules/concept/pages/' == output_dir:
-    #     # Extract the dataset name from the path
-    #     nav_entry = f"*** xref:concept:{file_name}.adoc[{name}]\n\n"
-    # elif 'modules/dataservice/pages/' == output_dir:
-    #     # Extract the dataset name from the path
-    #     nav_entry = f"*** xref:dataservice:{file_name}.adoc[{name}]\n\n"  
-    # elif 'modules/dataset-series/pages/' == output_dir:
-    #     # Extract the dataset name from the path
-    #     nav_entry = f"*** xref:dataset-series:{file_name}.adoc[{name}]\n\n"                     
-    # else:
-    #     # linkstr= output_dir+"/"+ file_name
-    #     # For catalog pages or other types, use a more general approach
-    #     nav_entry = f"*** xref:{output_dir}:{file_name}.adoc[{name}]\n\n"
-    
+
     nav_file_path = 'modules/data-catalog/nav.adoc'
     
     try:
@@ -169,26 +161,10 @@ def add_to_nav(file_name: str, output_dir: str, resource: URIRef, catalog_graph:
         with open(nav_file_path, 'a') as f:
                 f.write(nav_entry)
         
-        # if match:
-        #     # Insert the new nav entry
-        #     new_content = content[:match.end(1)] + nav_entry + match.group(2) + content[match.end(0):]
-        #     with open(nav_file_path, 'w') as f:
-        #         f.write(new_content)
-        # else:
-        #     # If "Datasets" section not found, append to end
-            # with open(nav_file_path, 'a') as f:
-            #     f.write(nav_entry)
-                
+
     except FileNotFoundError:
         ...
-        # If nav.adoc doesn't exist, create it with basic structure
-#         with open(nav_file_path, 'w') as f:
-#             f.write(f"""[.truncate]
-# * Data Catalog
-# ** xref:data-catalog:fhwiehduwke.adoc[Index]
-# ** Datasets
-# *** {nav_entry.strip()}
-# """)          
+
             
 
 def create_nav_header(page_type: str):

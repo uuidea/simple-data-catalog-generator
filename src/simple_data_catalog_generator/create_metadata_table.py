@@ -1,11 +1,12 @@
 from rdflib import Graph, URIRef, Namespace, Literal, DCAT, DCTERMS, BNode, FOAF
-from simple_data_catalog_generator.create_adoc_table import create_adoc_table
+from create_adoc_table import create_adoc_table
 
 dcat = Namespace("http://www.w3.org/ns/dcat#")
 dcterms = Namespace("http://purl.org/dc/terms/")
 foaf = Namespace("http://xmlns.com/foaf/0.1/")
 ex= Namespace("http://www.example.com/")
 ADMS= Namespace("http://www.w3.org/ns/adms#")
+ODRL = Namespace("http://www.w3.org/ns/odrl/2/")
 
 
 def create_metadata_table(catalog_graph: Graph, resource: URIRef):
@@ -67,8 +68,22 @@ def create_metadata_table(catalog_graph: Graph, resource: URIRef):
             if type(o)==URIRef:
                 label= catalog_graph.value(o, dcterms.title)
                 link_str=f"link:{o}[{label}]"
-                metadata.append(['Status', link_str])                                 
+                metadata.append('Status')
+                metadata.append(link_str) 
 
+    if (resource, ODRL.hasPolicy, None) in catalog_graph:
+        obj= catalog_graph.objects(resource, ODRL.hasPolicy)
+        for o in obj:
+            if type(o)== Literal:
+                metadata.append('has Policy')
+                metadata.append(str(o))
+
+            if type(o)==URIRef:
+                label= catalog_graph.value(o, dcterms.title)
+                link_str=f"link:{o}[{label}]"
+                metadata.append('has Policy')
+                metadata.append(link_str)  
+    print(metadata)
     metadata_table= create_adoc_table(entries=metadata, num_cols=2)
 
     metadata_table_str= metadata_table

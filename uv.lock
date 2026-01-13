@@ -4404,7 +4404,7 @@ wheels = [
 ]
 
 [[package]]
-name = "simple-data-catalog"
+name = "simple-data-catalog-generator"
 version = "0.0.1"
 source = { editable = "." }
 dependencies = [
