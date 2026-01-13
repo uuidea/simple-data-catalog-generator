@@ -80,5 +80,5 @@ def create_data_catalog(catalog_graph: Graph):
 
 if __name__ == "__main__":
     catalog_graph=Graph()
-    catalog_graph.parse('data-catalog/data-catalog.yaml')
+    catalog_graph.parse('data-catalog/data-catalog.ttl')
     create_data_catalog(catalog_graph=catalog_graph)
