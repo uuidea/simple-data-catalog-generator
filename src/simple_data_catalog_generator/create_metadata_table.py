@@ -1,5 +1,6 @@
 from rdflib import Graph, URIRef, Namespace, Literal, DCAT, DCTERMS, BNode, FOAF
 from simple_data_catalog_generator.create_adoc_table import create_adoc_table
+from simple_data_catalog_generator.page_creation_functions import create_local_link
 
 dcat = Namespace("http://www.w3.org/ns/dcat#")
 dcterms = Namespace("http://purl.org/dc/terms/")
@@ -80,7 +81,7 @@ def create_metadata_table(catalog_graph: Graph, resource: URIRef):
 
             if type(o)==URIRef:
                 label= catalog_graph.value(o, dcterms.title)
-                link_str=f"link:{o}[{label}]"
+                link_str= create_local_link(resource=o, catalog_graph=catalog_graph)
                 metadata.append('has Policy')
                 metadata.append(link_str)  
     print(metadata)
