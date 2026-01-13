@@ -37,10 +37,10 @@ def create_local_link(resource: URIRef, catalog_graph: Graph)->str:
         local_link= f"xref:dataset-series:{id}.adoc[{title}]"  
     elif rdf_type== DCAT.Catalog:
         title= get_title(subject=resource, graph=catalog_graph)       
-        local_link= f"xref:dataset-series:{id}.adoc[{title}]"  
+        local_link= f"xref:data-catalog:{id}.adoc[{title}]"  
     elif rdf_type== ODRL.Policy:
         title= get_title(subject=resource, graph=catalog_graph)       
-        local_link= f"xref:dataset-series:{id}.adoc[{title}]"      
+        local_link= f"xref:policy:{id}.adoc[{title}]"      
     else:
         local_link=""                
     
