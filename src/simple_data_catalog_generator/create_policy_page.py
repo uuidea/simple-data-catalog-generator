@@ -1,6 +1,6 @@
 import re
 from rdflib import Graph, URIRef, RDF, DCTERMS, Namespace
-from page_creation_functions import write_file, get_title, get_description, create_local_link
+from simple_data_catalog_generator.page_creation_functions import write_file, get_title, get_description, create_local_link
 
 # ODRL namespace – the test data uses the standard ODRL terms
 ODRL = Namespace("http://www.w3.org/ns/odrl/2/")

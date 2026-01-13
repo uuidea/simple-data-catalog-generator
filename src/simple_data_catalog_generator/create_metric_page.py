@@ -3,8 +3,8 @@ from rdflib import Namespace, Graph, URIRef, RDF, DCAT, DCTERMS, SKOS
 
 from pydantic import BaseModel
 from typing import List, Optional
-from page_creation_functions import write_file, get_prefLabel, get_definition, create_local_link 
-from create_adoc_table import create_adoc_table
+from simple_data_catalog_generator.page_creation_functions import write_file, get_prefLabel, get_definition, create_local_link 
+from simple_data_catalog_generator.create_adoc_table import create_adoc_table
 
 # from create_metadata_table import create_metadata_table
 

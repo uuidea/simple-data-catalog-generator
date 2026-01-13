@@ -8,10 +8,10 @@ from typing import List, Optional
 import os
 import re
 
-from create_metadata_table import create_metadata_table
-from analysis_functions import create_theme_word_cloud
-from page_creation_functions import write_file, get_title, create_local_link, get_prefLabel, get_definition
-from create_adoc_table import create_adoc_table
+from simple_data_catalog_generator.create_metadata_table import create_metadata_table
+from simple_data_catalog_generator.analysis_functions import create_theme_word_cloud
+from simple_data_catalog_generator.page_creation_functions import write_file, get_title, create_local_link, get_prefLabel, get_definition
+from simple_data_catalog_generator.create_adoc_table import create_adoc_table
 
 
 def create_concept_page(concept: URIRef, catalog_graph: Graph):

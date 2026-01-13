@@ -1,7 +1,7 @@
 
 
 from rdflib import Namespace, URIRef, Graph, DCTERMS, DCAT
-from create_adoc_table import create_adoc_table
+from simple_data_catalog_generator.create_adoc_table import create_adoc_table
 
 
 
