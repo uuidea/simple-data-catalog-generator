@@ -80,10 +80,11 @@ def create_metadata_table(catalog_graph: Graph, resource: URIRef):
                 metadata.append(str(o))
 
             if type(o)==URIRef:
-                label= catalog_graph.value(o, dcterms.title)
+                # label= catalog_graph.value(o, dcterms.title)
                 link_str= create_local_link(resource=o, catalog_graph=catalog_graph)
                 metadata.append('has Policy')
                 metadata.append(link_str)  
+                
     print(metadata)
     metadata_table= create_adoc_table(entries=metadata, num_cols=2)
 
