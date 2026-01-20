@@ -26,6 +26,7 @@ def was_derived_from_graphic(catalog_graph: Graph, uri: URIRef):
     for i in was_derived_from:
         identifier2 = str(catalog_graph.value(URIRef(i), DCTERMS.identifier))
         label2 = str(catalog_graph.value(URIRef(i), DCTERMS.title))
+        print(label2)
         
         if label2 == 'None':
             if '#' in str(i):
