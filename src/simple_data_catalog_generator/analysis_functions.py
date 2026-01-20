@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import pathlib
-from simple_data_catalog_generator.page_creation_functions import get_id
+from simple_data_catalog_generator.page_creation_functions import get_id, get_title
 
 
 def was_derived_from_graphic(catalog_graph: Graph, uri: URIRef):
@@ -26,16 +26,10 @@ def was_derived_from_graphic(catalog_graph: Graph, uri: URIRef):
     for i in was_derived_from:
         identifier2 = get_id(resource= i, catalog_graph=catalog_graph)
 
-        label2 = str(catalog_graph.value(URIRef(i), DCTERMS.title))
+        label2 = get_title(subject=i, graph= catalog_graph)
 
         
-        if label2 == 'None':
-            if '#' in str(i):
-                label2 = str(i).split("#")[1]
-            if '/' in str(i):
-                label2 = str(i).split("/")[-1]                
-            else:
-                label2=re.sub(r'.*?\/', '/',str(i)).replace("/","")    
+         
             
         mermaid_lines.append(f"    {identifier2}[{label2}]")
         mermaid_lines.append(f"    {identifier} --> {identifier2}")
@@ -43,9 +37,7 @@ def was_derived_from_graphic(catalog_graph: Graph, uri: URIRef):
         # Handle indirect wasDerivedFrom relationships
         wdf_indirect = catalog_graph.objects(i, PROV.wasDerivedFrom*'+')
         for j in wdf_indirect:
-            label_j = str(catalog_graph.value(URIRef(j), DCTERMS.title))
-            if label_j == 'None':
-                label_j = str(j).split("#")[1]
+            label_j = get_title(subject=j, graph=catalog_graph)
             identifier_j = get_id(resource=j, catalog_graph=catalog_graph)
             
             mermaid_lines.append(f"    {identifier_j}[{label_j}]")
@@ -55,9 +47,7 @@ def was_derived_from_graphic(catalog_graph: Graph, uri: URIRef):
             j_derives_from = catalog_graph.subjects(PROV.wasDerivedFrom, URIRef(j))
             for k in j_derives_from:
                 identifier_k = get_id(resource=k, catalog_graph=catalog_graph)
-                label_k = str(catalog_graph.value(URIRef(k), DCTERMS.title))
-                if label_k == 'None':
-                    label_k = str(k).split("#")[1]
+                label_k = get_title(subject=k, graph=catalog_graph)
                 mermaid_lines.append(f"    {identifier_k}[{label_k}]")
                 mermaid_lines.append(f"    {identifier_k} --> {identifier_j}")
 

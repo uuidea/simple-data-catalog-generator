@@ -79,6 +79,14 @@ def get_title(subject: URIRef, graph: Graph)->str:
     title= graph.value(subject,DCTERMS.title)
 
     title_str=str(title)
+
+    if title_str == 'None':
+            if '#' in str(i):
+                title_str = str(i).split("#")[1]
+            elif '/' in str(i):
+                title_str = str(i).split("/")[-1]                
+            else:
+                title_str=re.sub(r'.*?\/', '/',str(i)).replace("/","")   
     return title_str
 
 def get_status(subject: URIRef, graph: Graph)->str:
