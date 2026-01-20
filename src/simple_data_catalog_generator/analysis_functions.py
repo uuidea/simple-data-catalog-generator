@@ -24,13 +24,16 @@ def was_derived_from_graphic(catalog_graph: Graph, uri: URIRef):
     mermaid_lines.append(f"    {identifier}[{label}]")
     
     for i in was_derived_from:
-        identifier2 = str(catalog_graph.value(URIRef(i), DCTERMS.identifier))
+        identifier2 = get_id(resource= i, catalog_graph=catalog_graph)
+
         label2 = str(catalog_graph.value(URIRef(i), DCTERMS.title))
         print(label2)
         
         if label2 == 'None':
             if '#' in str(i):
                 label2 = str(i).split("#")[1]
+            if '/' in str(i):
+                label2 = str(i).split("/")[1]                
             else:
                 label2=re.sub(r'.*?\/', '/',str(i)).replace("/","")    
             
