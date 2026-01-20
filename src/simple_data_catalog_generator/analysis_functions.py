@@ -33,7 +33,7 @@ def was_derived_from_graphic(catalog_graph: Graph, uri: URIRef):
             if '#' in str(i):
                 label2 = str(i).split("#")[1]
             if '/' in str(i):
-                label2 = str(i).split("/")[1]                
+                label2 = str(i).split("/")[-1]                
             else:
                 label2=re.sub(r'.*?\/', '/',str(i)).replace("/","")    
             

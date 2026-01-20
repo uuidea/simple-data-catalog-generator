@@ -129,6 +129,8 @@ def get_id(
     if identifier == "None":
         if "#" in str(resource):
             identifier = str(resource).split("#")[1]
+        elif "/" in str(resource):
+            identifier = str(resource).split("/")[-1]            
         else:
             # Normalization fallback: use final path segment without slashes
             identifier = re.sub(r".*?\/", "/", str(resource)).replace("/", "")
