@@ -90,40 +90,8 @@ def supply_chain_analysis(catalog_graph=Graph, dataset_uri= URIRef): # this shou
 
     mermaid_chart+="----\n\n"
 
-
-
     return mermaid_chart
 
-# def supply_chain_analysis(catalog_graph=Graph, dataset_uri= URIRef):
-#     dqv_ns=Namespace("http://www.w3.org/ns/dqv#")
-#     identifier=str(catalog_graph.value(URIRef(dataset_uri), DCTERMS.identifier))
-#     filename= "docs/figures/"+ identifier+"_supply_chain"
-#     path = pathlib.Path("docs/figures/")
-#     path.mkdir(parents=True, exist_ok=True)
-
-#     was_derived_from= catalog_graph.objects(dataset_uri, (PROV.wasDerivedFrom* '+'))
-#     ds_w_qm=0 # dataset with data quality measurement
-#     ds_wo_qm= 0# dataset without quality
-#     for wdf in was_derived_from:
-
-#         if (None, dqv_ns.computedOn, wdf) in catalog_graph:
-#             ds_w_qm= ds_w_qm +1
-#         else:
-#             ds_wo_qm= ds_wo_qm+1
-
-#     labels = 'with quality \nmeasurements', 'without quality \nmeasurements'
-#     sizes = [ds_w_qm, ds_wo_qm]
-
-#     fig, ax = plt.subplots()
-#     ax.pie(sizes, labels=labels)
-#     plt.legend(loc='lower right')
-#     plt.title('fraction of input datasets that has \nquality measurements (more is better)')
-    
-
-#     pie_file=filename+'.svg' 
-#     fig.savefig(pie_file)
-
-#     return pie_file
 
 def create_theme_word_cloud(catalog_graph: Graph, output_dir: str):
     
