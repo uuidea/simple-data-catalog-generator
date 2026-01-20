@@ -28,9 +28,6 @@ def was_derived_from_graphic(catalog_graph: Graph, uri: URIRef):
 
         label2 = get_title(subject=i, graph= catalog_graph)
 
-        
-         
-            
         mermaid_lines.append(f"    {identifier2}[{label2}]")
         mermaid_lines.append(f"    {identifier} --> {identifier2}")
         
@@ -166,3 +163,7 @@ def create_theme_word_cloud(catalog_graph: Graph, output_dir: str):
     return cloud_file_path
 
 
+if __name__ == "__main__":
+    catalog_graph=Graph()
+    catalog_graph.parse('tests/test-data.ttl')
+    print(was_derived_from_graphic(catalog_graph=catalog_graph, uri=URIRef('http://www.example.com/hdkehnf')))
