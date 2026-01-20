@@ -27,7 +27,7 @@ def was_derived_from_graphic(catalog_graph: Graph, uri: URIRef):
         identifier2 = get_id(resource= i, catalog_graph=catalog_graph)
 
         label2 = str(catalog_graph.value(URIRef(i), DCTERMS.title))
-        print(label2)
+
         
         if label2 == 'None':
             if '#' in str(i):
@@ -55,7 +55,10 @@ def was_derived_from_graphic(catalog_graph: Graph, uri: URIRef):
             j_derives_from = catalog_graph.subjects(PROV.wasDerivedFrom, URIRef(j))
             for k in j_derives_from:
                 identifier_k = get_id(resource=k, catalog_graph=catalog_graph)
-                mermaid_lines.append(f"    {identifier_k}[{identifier_k}]")
+                label_k = str(catalog_graph.value(URIRef(k), DCTERMS.title))
+                if label_k == 'None':
+                    label_k = str(k).split("#")[1]
+                mermaid_lines.append(f"    {identifier_k}[{label_k}]")
                 mermaid_lines.append(f"    {identifier_k} --> {identifier_j}")
 
     diagram_str= "=== Lineage visualized\n\n"
