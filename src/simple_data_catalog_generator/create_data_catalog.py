@@ -46,6 +46,11 @@ def create_data_catalog(catalog_graph: Graph):
 """)       
         
     create_catalog_page(catalog_graph)
+
+    # Save the graph as TTL in attachments directory
+    attachments_dir = 'modules/data-catalog/attachments/'
+    Path(attachments_dir).mkdir(parents=True, exist_ok=True)
+    catalog_graph.serialize(destination=f"{attachments_dir}data-catalog.ttl", format='turtle')
     
 
     create_nav_header(page_type= 'Dataset Series')
