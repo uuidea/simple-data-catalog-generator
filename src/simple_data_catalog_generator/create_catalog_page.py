@@ -26,7 +26,7 @@ def create_catalog_page(catalog_graph: Graph, output_dir: str= 'modules/data-cat
  
     adoc_str+= "== Description\n\n" + get_description(catalog, catalog_graph)+ "\n\n"
 
-    adoc_str+= "A machine readable version of this data catalog can be found here: xref:data-catalog.ttl[data-catalog.ttl]\n\n"
+    adoc_str+= "A machine readable version of this data catalog can be found here: xref:attachment$data-catalog.ttl[data-catalog.ttl]\n\n"
 
     # add metadata overview
 
