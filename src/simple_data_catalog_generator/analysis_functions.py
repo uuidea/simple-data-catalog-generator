@@ -11,49 +11,97 @@ from wordcloud import WordCloud
 import pathlib
 from simple_data_catalog_generator.page_creation_functions import get_id, get_title
 
-
 def was_derived_from_graphic(catalog_graph: Graph, uri: URIRef):
-    identifier =get_id(resource=uri, catalog_graph=catalog_graph)
-    label = str(catalog_graph.value(URIRef(uri), DCTERMS.title))
-    
-    # find was derived from datasets and populate graph
-    was_derived_from = catalog_graph.objects(URIRef(uri), PROV.wasDerivedFrom)
-    
-    # Build mermaid diagram as string
+    # ----------------------------------------------------------------------
+    # 1️⃣  Gather the full forward‑lineage (all datasets the `uri` derives from)
+    # ----------------------------------------------------------------------
+    lineage_nodes: dict[str, str] = {}          # id → label
+    lineage_edges: set[tuple[str, str]] = set() # (child_id, parent_id)
+
+    def _traverse(current: URIRef):
+        cur_id = get_id(resource=current, catalog_graph=catalog_graph)
+        cur_label = str(catalog_graph.value(current, DCTERMS.title) or cur_id)
+        lineage_nodes.setdefault(cur_id, cur_label)
+
+        for parent in catalog_graph.objects(current, PROV.wasDerivedFrom):
+            parent_id = get_id(resource=parent, catalog_graph=catalog_graph)
+            parent_label = str(catalog_graph.value(parent, DCTERMS.title) or parent_id)
+            lineage_nodes.setdefault(parent_id, parent_label)
+
+            edge = (cur_id, parent_id)
+            if edge not in lineage_edges:
+                lineage_edges.add(edge)
+                _traverse(parent)               # recurse downstream
+
+    _traverse(URIRef(uri))
+
+    # ----------------------------------------------------------------------
+    # 2️⃣  Build the mermaid diagram – only emit each edge once
+    # ----------------------------------------------------------------------
     mermaid_lines = ["graph TD"]
-    mermaid_lines.append(f"    {identifier}[{label}]")
-    
-    for i in was_derived_from:
-        identifier2 = get_id(resource= i, catalog_graph=catalog_graph)
+    for node_id, node_label in lineage_nodes.items():
+        mermaid_lines.append(f"    {node_id}[{node_label}]")
 
-        label2 = get_title(subject=i, graph= catalog_graph)
+    for child_id, parent_id in lineage_edges:
+        mermaid_lines.append(f"    {child_id} --> {parent_id}")
 
-        mermaid_lines.append(f"    {identifier2}[{label2}]")
-        mermaid_lines.append(f"    {identifier} --> {identifier2}")
-        
-        # Handle indirect wasDerivedFrom relationships
-        wdf_indirect = catalog_graph.objects(i, PROV.wasDerivedFrom*'+')
-        for j in wdf_indirect:
-            label_j = get_title(subject=j, graph=catalog_graph)
-            identifier_j = get_id(resource=j, catalog_graph=catalog_graph)
-            
-            mermaid_lines.append(f"    {identifier_j}[{label_j}]")
-            mermaid_lines.append(f"    {identifier2} --> {identifier_j}")
-            
-            # Handle reverse relationships
-            j_derives_from = catalog_graph.subjects(PROV.wasDerivedFrom, URIRef(j))
-            for k in j_derives_from:
-                identifier_k = get_id(resource=k, catalog_graph=catalog_graph)
-                label_k = get_title(subject=k, graph=catalog_graph)
-                mermaid_lines.append(f"    {identifier_k}[{label_k}]")
-                mermaid_lines.append(f"    {identifier_k} --> {identifier_j}")
-
-    diagram_str= "=== Lineage visualized\n\n"
-    diagram_str+= "[mermaid, lineage, svg]\n---- \n" 
-    diagram_str+=('\n'.join(mermaid_lines)+ "\n\n")
-    diagram_str+="----\n\n"
+    # ----------------------------------------------------------------------
+    # 3️⃣  Wrap the diagram for the Markdown renderer
+    # ----------------------------------------------------------------------
+    diagram_str = "=== Lineage visualized\n\n"
+    diagram_str += "[mermaid, lineage, svg]\n---- \n"
+    diagram_str += ("\n".join(mermaid_lines) + "\n\n")
+    diagram_str += "----\n\n"
 
     return diagram_str
+
+# def was_derived_from_graphic(catalog_graph: Graph, uri: URIRef):
+#     identifier =get_id(resource=uri, catalog_graph=catalog_graph)
+#     label = str(catalog_graph.value(URIRef(uri), DCTERMS.title))
+    
+#     # find was derived from datasets and populate graph
+#     was_derived_from = catalog_graph.objects(URIRef(uri), PROV.wasDerivedFrom)
+    
+#     # Build mermaid diagram as string
+#     mermaid_lines = ["graph TD"]
+#     mermaid_lines.append(f"    {identifier}[{label}]")
+    
+#     for i in was_derived_from:
+#         ## TODO: make check if an edge is already in the graph
+#         ## TODO: for the reverse relations: first check if the node 
+#         ## is in the lineage path (wdf_indirect)
+#         ## and then if the new edge is already in the graph
+
+#         identifier2 = get_id(resource= i, catalog_graph=catalog_graph)
+
+#         label2 = get_title(subject=i, graph= catalog_graph)
+
+#         mermaid_lines.append(f"    {identifier2}[{label2}]")
+#         mermaid_lines.append(f"    {identifier} --> {identifier2}")
+        
+#         # Handle indirect wasDerivedFrom relationships
+#         wdf_indirect = catalog_graph.objects(i, PROV.wasDerivedFrom*'+')
+#         for j in wdf_indirect:
+#             label_j = get_title(subject=j, graph=catalog_graph)
+#             identifier_j = get_id(resource=j, catalog_graph=catalog_graph)
+            
+#             mermaid_lines.append(f"    {identifier_j}[{label_j}]")
+#             # mermaid_lines.append(f"    {identifier2} --> {identifier_j}")
+            
+#             # Handle reverse relationships
+#             j_derives_from = catalog_graph.subjects(PROV.wasDerivedFrom, URIRef(j))
+#             for k in j_derives_from:
+#                 identifier_k = get_id(resource=k, catalog_graph=catalog_graph)
+#                 label_k = get_title(subject=k, graph=catalog_graph)
+#                 mermaid_lines.append(f"    {identifier_k}[{label_k}]")
+#                 mermaid_lines.append(f"    {identifier_k} --> {identifier_j}")
+
+#     diagram_str= "=== Lineage visualized\n\n"
+#     diagram_str+= "[mermaid, lineage, svg]\n---- \n" 
+#     diagram_str+=('\n'.join(mermaid_lines)+ "\n\n")
+#     diagram_str+="----\n\n"
+
+#     return diagram_str
 
 def get_data_quality(catalog_graph= Graph, dataset_uri=URIRef):
     dqv_ns=Namespace("http://www.w3.org/ns/dqv#")
