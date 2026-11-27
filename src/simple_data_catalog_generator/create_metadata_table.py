@@ -25,19 +25,20 @@ def create_metadata_table(catalog_graph: Graph, resource: URIRef):
             if type(o)==URIRef:
                 label= catalog_graph.value(o, dcterms.title)
                 link_str=f"link:{o}[{label}]"
-                metadata.append(['Title', link_str])
+                metadata.append('Title')
+                metadata.append(link_str)
     if (resource, dcterms.identifier, None) in catalog_graph:
         obj= catalog_graph.objects(resource, dcterms.identifier)
         for o in obj:
             if type(o)== Literal:
-                metadata.append(('Identifier', str(o)))
+                metadata.append('Identifier')
+                metadata.append(str(o))
 
 
     if (resource, DCTERMS.publisher, None) in catalog_graph:
         metadata.append('Publisher')
         obj= catalog_graph.objects(resource, DCTERMS.publisher)
         for o in obj:
-            print(type(o))
             if type(o)==BNode:
                 metadata.append(catalog_graph.value(o,FOAF.name))
 
@@ -85,7 +86,6 @@ def create_metadata_table(catalog_graph: Graph, resource: URIRef):
                 metadata.append('has Policy')
                 metadata.append(link_str)  
                 
-    print(metadata)
     metadata_table= create_adoc_table(entries=metadata, num_cols=2)
 
     metadata_table_str= metadata_table
